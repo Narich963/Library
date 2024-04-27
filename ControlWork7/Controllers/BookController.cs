@@ -23,14 +23,19 @@ namespace ControlWork7.Controllers
         }
 
         // GET: Book
-        public async Task<IActionResult> Index(int page = 1)
+        public async Task<IActionResult> Index(string? status, int page = 1)
         {
+            int pagesize = 2;
             List<Book> books = await _context.Books.Include(b => b.Category).Include(b => b.UsersAndBooks).ThenInclude(b => b.User).ToListAsync();
+            if (status != null)
+            {
+                books = books.Where(b => b.Status == status).ToList();
+                pagesize = 10;
+            }
             User user = await _context.Users.FirstOrDefaultAsync(u => u.Email == User.Identity.Name);
 
             ViewBag.User = user;
 
-            int pagesize = 2;
             var count = books.Count();
             var items = books.Skip((page - 1) * pagesize).Take(pagesize).ToList();
 
