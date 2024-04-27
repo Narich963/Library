@@ -1,0 +1,30 @@
+﻿@model List<Book>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+@foreach (var book in Model)
+{
+    <div class="card" style="width: 18rem;">
+      <img src="@book.PhotoUrl" class="card-img-top" alt="No Image">
+      <div class="card-body">
+        <h5 class="card-title">@book.Name</h5>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">Автор: @book.Author</li>
+        <li class="list-group-item">Статус: @book.Status</li>
+        <li class="list-group-item">A third item</li>
+      </ul>
+      <div class="card-body">
+        <a class="card-link btn btn-primary">Получить</a>
+        <a class="card-link btn btn-warning" asp-action="Details">Подробнее</a>
+      </div>
+    </div>
+}
