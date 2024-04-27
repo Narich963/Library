@@ -16,18 +16,19 @@
 @foreach (var book in Model.Books)
 {
     <div class="card" style="width: 18rem;">
-      <img src="@book.PhotoUrl" class="card-img-top" alt="No Image">
-      <div class="card-body">
-        <h5 class="card-title">@book.Name</h5>
-      </div>
-      <ul class="list-group list-group-flush">a
-        <li class="list-group-item">Автор: @book.Author</li>
-        <li class="list-group-item">Статус: @book.Status</li>
-      </ul>
-      <div class="card-body">
+        <img src="@book.PhotoUrl" class="card-img-top" alt="No Image">
+        <div class="card-body">
+            <h5 class="card-title">@book.Name</h5>
+        </div>
+        <ul class="list-group list-group-flush">
+            a
+            <li class="list-group-item">Автор: @book.Author</li>
+            <li class="list-group-item">Статус: @book.Status</li>
+        </ul>
+        <div class="card-body">
             @if (!User.Identity.IsAuthenticated)
             {
-                
+
             }
             else if (book.UsersAndBooks.Count == 0 || !book.UsersAndBooks.Any(b => b.ReturnBookDate == null && b.User != null) && book.Status == "В наличии")
             {
@@ -38,19 +39,19 @@
                 <a class="card-link btn btn-primary" asp-action="ReturnBook" asp-route-id="@book.Id">Вернуть</a>
             }
             <a class="card-link btn btn-warning" asp-action="Details" asp-route-id="@book.Id">Подробнее</a>
-            
-      </div>
+
+        </div>
     </div>
 }
 <div class="row">
     @if (Model.PageViewModel.HasPreviousPage)
     {
-        <a class="col-2" asp-action="Index" asp-route-page="@(Model.PageViewModel.PageNumger - 1)" class="btn btn-primary">Назад</a>
+        <a class="col-2" asp-action="Cabinet" asp-route-page="@(Model.PageViewModel.PageNumger - 1)" asp-route-email="@User.Identity.Name" class="btn btn-primary">Назад</a>
     }
     <span class="text-primary col-2">@Model.PageViewModel.PageNumger</span>
     @if (Model.PageViewModel.HasNextPage)
     {
-        <a class="col-2" asp-action="Index" asp-route-page="@(Model.PageViewModel.PageNumger + 1)" class="btn btn-primary">Вперед</a>
+        <a class="col-2" asp-action="Cabinet" asp-route-page="@(Model.PageViewModel.PageNumger + 1)" asp-route-email="@User.Identity.Name" class="btn btn-primary">Вперед</a>
 
     }
 </div>

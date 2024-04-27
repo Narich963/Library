@@ -18,4 +18,6 @@ public class Book
 
     public int CategoryId { get; set; }
     public Category? Category { get; set; }
+
+    public List<UserAndBook>? UsersAndBooks { get; set; } = new List<UserAndBook>();
 }

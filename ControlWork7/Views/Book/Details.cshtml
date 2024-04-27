@@ -46,6 +46,31 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Created)
         </dd>
+        <dt class="col-sm-2">
+            Пользователи
+        </dt>
+        <dd class="col-sm-10">
+            @if (Model.UsersAndBooks == null || Model.UsersAndBooks.Count == 0)
+            {
+                <span>Никто еще не брал книгу</span>
+            }
+            else
+            {
+                <ul>
+                    @foreach (var u in Model.UsersAndBooks)
+                    {
+                        @if (u.GetBookDate != null && u.ReturnBookDate == null)
+                        {
+                            <li>@u.User.Name c @(u.GetBookDate.ToLongDateString()) до н.в.</li>
+                        }
+                        else
+                        {
+                            <li>@u.User.Name c @(u.GetBookDate.ToLongDateString()) до @(u.ReturnBookDate)</li>
+                        }
+                    }
+                </ul>
+            }
+        </dd>
         <img src="@Model.PhotoUrl" alt="No image" style="width: 300px; height: 300px;"/>
     </dl>
 </div>
