@@ -12,6 +12,28 @@
 <table class="table">
     <thead>
         <tr>
+            <form asp-action="Index" method="get">
+                <th>
+                    <label for="name">Название</label>
+                    <input class="form-control" name="name" id="name" type="text" />
+                </th>
+                <th>
+                    <label for="author">Автор</label>
+                    <input class="form-control" name="author" id="author" type="text" />
+                </th>
+                <th>
+                    <label for="status">Status</label>
+                    <select class="form-control" name="status" id="status">
+                        <option value=""> </option>
+                        <option value="В наличии">В наличии</option>
+                        <option value="Выдана">Выдана</option>
+                    </select>
+                </th>
+                <button class="btn btn-primary">Фильтровать</button>
+
+             </form>
+    <thead>
+        <tr>
             <th>
                 <a asp-action="Index" asp-route-order="@ViewBag.NameSort">Название</a>
             </th>

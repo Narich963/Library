@@ -13,6 +13,7 @@ using static System.Reflection.Metadata.BlobBuilder;
 using ControlWork7.Services;
 using static ControlWork7.Services.SortBook;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace ControlWork7.Controllers
 {
@@ -26,7 +27,7 @@ namespace ControlWork7.Controllers
         }
 
         // GET: Book
-        public async Task<IActionResult> Index(string? status, int page = 1, SortBook order = CreatedDesc)
+        public async Task<IActionResult> Index(string? name, string?  author, string? status, int page = 1, SortBook order = CreatedDesc)
         {
             ViewBag.NameSort = order == NameAsc ? NameDesc : NameAsc;
             ViewBag.AuthorSort = order == AuthorAsc ? AuthorDesc : AuthorAsc;
@@ -38,6 +39,14 @@ namespace ControlWork7.Controllers
             {
                 books = books.Where(b => b.Status == status).ToList();
                 pagesize = 10;
+            }
+            if (name != null)
+            {
+                books = books.Where(b => b.Name == name).ToList();
+            }
+            if (author != null)
+            {
+                books = books.Where(b => b.Author == author).ToList();
             }
             User user = await _context.Users.FirstOrDefaultAsync(u => u.Email == User.Identity.Name);
 
