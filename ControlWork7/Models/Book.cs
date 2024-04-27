@@ -15,4 +15,7 @@ public class Book
     public string? Description { get; set; }
     public DateTime Created { get; set; } = DateTime.UtcNow;
     public string Status { get; set; }
+
+    public int CategoryId { get; set; }
+    public Category? Category { get; set; }
 }

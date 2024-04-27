@@ -37,6 +37,15 @@
                 <input asp-for="Description" class="form-control"/>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="CategoryId" class="control-label"></label>
+                <select asp-for="CategoryId" class="form-control">
+                    @foreach (var c in (List<Category>)ViewBag.Categories)
+                    {
+                        <option value="@c.Id">@c.Name</option>
+                    }
+                </select>
+            </div>
             <input type="hidden" asp-for="Status" value="В наличии"/>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
