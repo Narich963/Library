@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ControlWork7.Models;
+using ControlWork7.ViewModels;
+using Microsoft.Build.Framework;
 
 namespace ControlWork7.Controllers
 {
@@ -19,9 +21,22 @@ namespace ControlWork7.Controllers
         }
 
         // GET: Book
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page=1)
         {
-            return View(await _context.Books.ToListAsync());
+            List<Book> books = await _context.Books.ToListAsync();
+
+            int pagesize = 1;
+            var count = books.Count();
+            var items = books.Skip((page - 1) * pagesize).Take(pagesize).ToList();
+
+            PageViewModel pageViewModel = new PageViewModel(count, page, pagesize);
+            IndexViewModel viewModel = new()
+            {
+                PageViewModel = pageViewModel,
+                Books = items
+            };
+
+            return View(viewModel);
         }
 
         // GET: Book/Details/5
@@ -53,7 +68,7 @@ namespace ControlWork7.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Author,PhotoUrl,PublishedDate,Description,Created")] Book book)
+        public async Task<IActionResult> Create([Bind("Id,Name,Author,PhotoUrl,PublishedDate,Description,Created,Status")] Book book)
         {
             if (ModelState.IsValid)
             {
@@ -85,7 +100,7 @@ namespace ControlWork7.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Author,PhotoUrl,PublishedDate,Description,Created")] Book book)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Author,PhotoUrl,PublishedDate,Description,Created,Status")] Book book)
         {
             if (id != book.Id)
             {

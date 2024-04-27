@@ -1,4 +1,4 @@
-﻿@model List<Book>
+﻿@model ControlWork7.ViewModels.IndexViewModel
 
 @{
     ViewData["Title"] = "Index";
@@ -9,8 +9,11 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-
-@foreach (var book in Model)
+@if (Model.Books.Count == 0)
+{
+    <p>Книг нету</p>
+}
+@foreach (var book in Model.Books)
 {
     <div class="card" style="width: 18rem;">
       <img src="@book.PhotoUrl" class="card-img-top" alt="No Image">
@@ -20,11 +23,22 @@
       <ul class="list-group list-group-flush">
         <li class="list-group-item">Автор: @book.Author</li>
         <li class="list-group-item">Статус: @book.Status</li>
-        <li class="list-group-item">A third item</li>
       </ul>
       <div class="card-body">
         <a class="card-link btn btn-primary">Получить</a>
-        <a class="card-link btn btn-warning" asp-action="Details">Подробнее</a>
+        <a class="card-link btn btn-warning" asp-action="Details" asp-route-id="@book.Id">Подробнее</a>
       </div>
     </div>
 }
+<div class="row">
+    @if (Model.PageViewModel.HasPreviousPage)
+    {
+        <a class="col-2" asp-action="Index" asp-route-page="@(Model.PageViewModel.PageNumger - 1)" class="btn btn-primary">Назад</a>
+    }
+    <span class="text-primary col-2">@Model.PageViewModel.PageNumger</span>
+    @if (Model.PageViewModel.HasNextPage)
+    {
+        <a class="col-2" asp-action="Index" asp-route-page="@(Model.PageViewModel.PageNumger + 1)" class="btn btn-primary">Вперед</a>
+
+    }
+</div>

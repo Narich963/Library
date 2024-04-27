@@ -11,7 +11,7 @@ public class Book
     public string Author { get; set; }
     [Required]
     public string PhotoUrl { get; set; }
-    public DateTime? PublishedDate { get; set; }
+    public int PublishedYear { get; set; }
     public string? Description { get; set; }
     public DateTime Created { get; set; } = DateTime.UtcNow;
     public string Status { get; set; }
