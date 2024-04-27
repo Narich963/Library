@@ -9,6 +9,21 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index" asp-route-order="@ViewBag.NameSort">Название</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-order="@ViewBag.AuthorSort">Автор</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-order="@ViewBag.StatusSort">Статус</a>
+            </th>
+        </tr>
+    </thead>
+</table>
 @if (Model.Books.Count == 0)
 {
     <p>Книг нету</p>

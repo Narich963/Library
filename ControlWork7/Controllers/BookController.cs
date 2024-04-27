@@ -10,6 +10,9 @@ using ControlWork7.ViewModels;
 using Microsoft.Build.Framework;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using static System.Reflection.Metadata.BlobBuilder;
+using ControlWork7.Services;
+using static ControlWork7.Services.SortBook;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 
 namespace ControlWork7.Controllers
 {
@@ -23,8 +26,12 @@ namespace ControlWork7.Controllers
         }
 
         // GET: Book
-        public async Task<IActionResult> Index(string? status, int page = 1)
+        public async Task<IActionResult> Index(string? status, int page = 1, SortBook order = CreatedDesc)
         {
+            ViewBag.NameSort = order == NameAsc ? NameDesc : NameAsc;
+            ViewBag.AuthorSort = order == AuthorAsc ? AuthorDesc : AuthorAsc;
+            ViewBag.StatusSort = order == StatusAsc ? StatusDesc : StatusAsc;
+
             int pagesize = 2;
             List<Book> books = await _context.Books.Include(b => b.Category).Include(b => b.UsersAndBooks).ThenInclude(b => b.User).ToListAsync();
             if (status != null)
@@ -35,6 +42,8 @@ namespace ControlWork7.Controllers
             User user = await _context.Users.FirstOrDefaultAsync(u => u.Email == User.Identity.Name);
 
             ViewBag.User = user;
+
+            books = GetSortOrder(books, order);
 
             var count = books.Count();
             var items = books.Skip((page - 1) * pagesize).Take(pagesize).ToList();
@@ -269,5 +278,34 @@ namespace ControlWork7.Controllers
             }
             return NotFound();
         }
+        [NonAction]
+        public List<Book> GetSortOrder(List<Book> tasks, SortBook order) =>
+            order switch
+            {
+
+                NameAsc => tasks.OrderBy(t => t.Name).ToList(),
+                NameDesc => tasks.OrderByDescending(t => t.Name).ToList(),
+                AuthorAsc => tasks.OrderBy(t => t.Author).ToList(),
+                AuthorDesc => tasks.OrderByDescending(t => t.Author).ToList(),
+                CreatedDesc => tasks.OrderByDescending(t => t.Created).ToList(),
+                StatusAsc => SortStatusAsc(tasks),
+                StatusDesc => SortStatusDesc(tasks)
+            };
+        [NonAction]
+        public List<Book> SortStatusAsc(List<Book> tasks) =>
+            tasks.OrderBy(t => t.Status switch
+            {
+                "В наличии" => 0,
+                "Выдана" => 1,
+                _ => 2
+            }).ToList();
+        [NonAction]
+        public List<Book> SortStatusDesc(List<Book> tasks) =>
+            tasks.OrderBy(t => t.Status switch
+            {
+                "В наличии" => 2,
+                "Выдана" => 1,
+                _ => 0
+            }).ToList();
     }
 }
